@@ -57,17 +57,8 @@ def build(ctx, env_name=env_name, kernel=True):
     if kernel:
         ctx.run("{0!s} activate {1!s} && ipython kernel install --name {1!s} --display-name {1!s} --sys-prefix".format(source, env_name))
 
-@task
-def r(ctx, env_name=env_name):
-    '''
-    Installs the r kernel and associated libs.
-    '''
-    cmd = '{0!s} activate {1!s} && conda install -c conda-forge r-irkernel r-ggplot2'
-    ctx.run(cmd.format(source, env_name))
-
-
 # Configure cross-platform settings.
-ns = Collection(environment, build, demofiles, r, clean, talk)
+ns = Collection(environment, build)
 ns.configure({
     'run': {
         'shell': which('bash') if os.name != 'nt' else which('cmd'),
