@@ -6,7 +6,7 @@ from subprocess import check_output
 from shutil import which
 import shutil
 
-env_name = 'jupyter_kernel'
+env_name = 'kernel_py36_conda'
 source = '' if os.name == 'nt' else 'source'
 
 
