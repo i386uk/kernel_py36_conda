@@ -21,6 +21,6 @@ dependencies:
 - tensorflow=1.1
 - sympy=1.2
 - pyyaml=3.12
-- traittypes=0.2.6
+- traittypes=0.2
 - invoke=1.1.1
 - plotly=3.1
