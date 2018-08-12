@@ -18,7 +18,7 @@ dependencies:
 - scikit-image=0.14
 - scikit-learn=0.18
 - seaborn=0.9
-- tensorflow=1.1
+- tensorflow=1.9
 - sympy=1.2
 - pyyaml=3.12
 - traittypes=0.2
