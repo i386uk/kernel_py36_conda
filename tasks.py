@@ -47,8 +47,6 @@ def build(ctx, env_name=env_name, kernel=True):
     ctx.run("""
         {0!s} activate {1!s} &&
         jupyter labextension install @jupyterlab/fasta-extension@0.17 --no-build &&
-        jupyter labextension install @jupyterlab/geojson-extension@0.17 --no-build &&
-        jupyter labextension install @jupyterlab/google-drive@0.13 --no-build &&
         jupyter labextension install @jupyterlab/plotly-extension@0.17 --no-build &&
         jupyter labextension install @jupyter-widgets/jupyterlab-manager@0.36 --no-build &&
         jupyter labextension install bqplot@0.3.6 --no-build &&
