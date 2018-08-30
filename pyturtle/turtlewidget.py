@@ -16,11 +16,11 @@ from IPython.display import display
 
 from ipywidgets import DOMWidget
 from traitlets import Unicode, List
-from pyturtle._version import EXTENSION_SPEC_VERSION
+from ._version import EXTENSION_SPEC_VERSION
 
 module_name = "jupyter-pyturtle"
 
-class OldTurtle(DOMWidget):
+class Turtle(DOMWidget):
     """TODO: Add docstring here
     """
     _model_name = Unicode('TurtleModel').tag(sync=True)
@@ -54,6 +54,7 @@ class OldTurtle(DOMWidget):
         self.color = "black"
         self.bearing = 90
         self.points = []
+        self.b_change = 0
         self.home()
 
     def pendown(self):

@@ -4,7 +4,9 @@
 # Copyright (c) Xiaofan Li.
 # Distributed under the terms of the Modified BSD License.
 
-from pyturtle.depr.turtlewidget import Turtle
+import pytest
+
+from ..turtlewidget import Turtle
 
 
 def test_example_creation_blank():

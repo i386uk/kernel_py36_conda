@@ -20478,7 +20478,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Update this value when attributes are added/removed from
  * your models, or serialized format changes.
  */
-exports.EXTENSION_SPEC_VERSION = '0.1.17';
+exports.EXTENSION_SPEC_VERSION = '0.1.19';
 
 
 /***/ }),
