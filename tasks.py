@@ -52,7 +52,8 @@ def build(ctx, env_name=env_name, kernel=True):
         jupyter labextension install @jupyterlab/plotly-extension@0.16 --no-build &&
         jupyter labextension install @jupyter-widgets/jupyterlab-manager@0.35 --no-build &&
         jupyter labextension install bqplot@0.3.6 --no-build &&
-		jupyter labextension install jupyter-matplotlib@0.3.0 --no-build &&
+        jupyter labextension install jupyter-matplotlib@0.3.0 --no-build &&
+        jupyter labextension install jupyterlab_bokeh &&
         jupyter lab clean && jupyter lab build
         """.format(source, env_name).strip().replace('\n', ''))
     if kernel:
