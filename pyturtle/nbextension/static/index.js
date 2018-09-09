@@ -20110,15 +20110,15 @@ function activateWidgetExtension(app, registry) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(/*! paper */ "./node_modules/paper/dist/paper-full.js"), __webpack_require__(/*! @jupyter-widgets/base */ "@jupyter-widgets/base")], __WEBPACK_AMD_DEFINE_RESULT__ = (function(paperlib, widget){
-    
-    var TurtleDrawing = function(canvas_element, grid_button, help_button) {
+
+    function TurtleDrawing(canvas_element, grid_button, help_button) {
         this.points = [];
         this.canvas = canvas_element;
         this.canvas.style.background = '#99CCFF';
         paper.setup(this.canvas);
-        
+
         /* adds grid for user to turn off / on, helps see what the turtle is doing */
-        this.grid = new paper.Path();
+        this.grid = new paper.Path();                                                    /*Path??*/
         this.grid_on = false;
         this.grid_button = grid_button;
         var that = this;
@@ -20129,9 +20129,9 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                 grid.strokeColor = 'grey';
                 var start = new paper.Point(1,1);
                 grid.moveTo(start);
-                var canvasSize = that.canvas.width;
+                var canvasSize = parseInt(that.canvas.style.width.replace(/px/,""));
                 grid.lineTo(start.add([0,canvasSize]));
-                
+
                 var i;
                 for(i = 20; i <= canvasSize; i += 20){
                     grid.lineTo(start.add([i,canvasSize]));
@@ -20150,45 +20150,68 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                 paper.view.draw();
             }
         });
-        
+
         this.help_button = help_button;
         this.help_button.click(function (event){
             alert("example:\nfrom NewTurtle import Turtle\nt = Turtle()\nt.forward(50)\nfor help:\nhelp(Turtle)");
         });
-        
+
         // some variable to play with still
         this.lineSize = 2;
         this.rotateSpeed = 1;
-        this.turtleColour ='#006900' ;
+        this.turtleColour ='black' ;
         this.turtleShow = 1;
-        
+
         // onFrame variables
+        if (this.canvas.style.width){
+            this.centreWidth = parseInt(parseInt(this.canvas.style.width.replace(/px/,""))/2);
+        }else{
+            this.centreWidth = parseInt(this.canvas.width/2);
+        }
+        if (this.canvas.style.height) {
+            this.centreHeight = parseInt(parseInt(this.canvas.style.height.replace(/px/, "")) / 2);
+        }else{
+            this.centreHeight = parseInt(this.canvas.height/2);
+        }
         this.oldPen=1;
-        this.oldX = 200;
-        this.oldY = 200;
+        this.oldX = this.centreWidth;
+        this.oldY = this.centreHeight;
         this.oldRotation=0;
         this.oldColour="black";
         this.newPen=1;
-        this.newX=200; 
-        this.newY=200;
+        this.newX=this.centreWidth;
+        this.newY=this.centreHeight;
         this.newRotation=0;
         this.newColour="black";
-        this.veryOldX = 200;
-        this.veryOldY = 200;
+        this.veryOldX = this.centreWidth;
+        this.veryOldY = this.centreHeight;
         this.turtleSpeed = 1;
+
 
         // counts each turtle command
         this.count = 0;
         this.changRot = 0;
-        
+
         this.path = new paper.Path();
         this.path.strokeWidth = 3;
         this.path.add(new paper.Point(this.veryOldX, this.veryOldY));
-        
-        /* 
-           nextCount is the first function to run for each turtle command. It sets the 
+
+        /*
+           nextCount is the first function to run for each turtle command. It sets the
            global variables to each of the values pulled from the intial string.
         */
+
+        TurtleDrawing.prototype.translateColor = function translatecolor(color){
+            if ( typeof color != "string" ) {
+                return new paper.Color(color[0], color[1], color[2]);
+            }else{
+                return color;
+            }
+        }
+
+
+
+
         TurtleDrawing.prototype.nextCount = function (){
             var count = this.count;
             if (count+1 >= this.points.length) {
@@ -20196,33 +20219,78 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             }
             this.oldPen = this.points[count].p;
             this.oldColour = this.points[count].lc;
-            this.oldX = this.points[count].x;
-            this.oldY = this.points[count].y;
+            this.oldX = this.points[count].x + this.centreWidth;
+            this.oldY = this.points[count].y + this.centreHeight;
             this.oldRotation = this.points[count].b;
             this.turtleSpeed = this.points[count].s;
             this.newPen = this.points[count+1].p;
             this.newColour = this.points[count+1].lc;
-            this.newX = this.points[count+1].x;
-            this.newY = this.points[count+1].y;
+            this.newX = this.points[count+1].x + this.centreWidth;
+            this.newY = this.points[count+1].y + this.centreHeight;
             this.changRot = this.points[count+1].b;
             this.turtleSpeed = this.points[count+1].s;
             this.count++;
             this.veryOldX = this.oldX;
             this.veryOldY = this.oldY;
+            this.oldshowarrow = this.points[count].t;
+            this.newshowarrow = this.points[count+1].t;
+            this.oldpenwidth = this.points[count].w;
+            this.newpenwidth = this.points[count+1].w;
+            this.oldarrowcolor = this.points[count].a;
+            this.newarrowcolor = this.points[count+1].a;
+            this.oldtext = this.points[count].wr;
+            this.newtext = this.points[count+1].wr;
+
+
             //path.add(new paper.Point(veryOldX, veryOldY));
 
             if (this.newPen != this.oldPen || this.newColour != this.oldColour){
                 //Changing pen - start a new path
                 this.path = new paper.Path();
-                this.path.strokeWidth = 3;
+                this.path.strokeWidth = this.newpenwidth;
                 this.path.add(new paper.Point(this.oldX, this.oldY));
             }
+
+
+            if (this.oldarrowcolor != this.newarrowcolor){
+                this.turtle.fillColor = this.translateColor(this.newarrowcolor);
+            }
+
+
+            if (this.oldshowarrow != this.newshowarrow){
+                if (this.newshowarrow === 0){
+                    this.turtle.scale(0.1);
+                    this.turtle.fillColor = this.canvas.style.background;
+                }else{
+                    this.turtle.scale(10);
+                    this.turtle.fillColor = this.translateColor(this.newarrowcolor);
+                }
+            }
+
+
+            if (this.oldpenwidth != this.newpenwidth ){
+                this.path.strokeWidth = this.newpenwidth;
+            }
+
+
+            if (this.newtext.length!=0){
+                var text =new paper.PointText({
+                    point: [that.newtext.startx + this.centreWidth, that.newtext.starty + this.centreHeight],
+                    content: that.newtext.arg,
+                    fillColor: that.newtext.color,
+                    fontFamily: that.newtext.fontfamily,
+                    fontWeight: that.newtext.fontweight,
+                    fontSize: that.newtext.fontsize
+                })
+            }
+
 
             // Good test command to see what the input is from the string
            //alert("old:"+oldX +" "+ oldY + " " + oldRotation + " New:" + newX + " " +newY + " " + changRot+ " " +turtleSpeed );
 
         };
-        
+
+
         TurtleDrawing.prototype.draw_turtle = function() {
             //builds the initial turtle icon
             if(this.turtleShow===1){
@@ -20230,56 +20298,25 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                 var oldY = this.oldY;
                 var turtleColour = this.turtleColour;
 
-                var tail = new paper.Path.RegularPolygon(new paper.Point(oldX-11,oldY), 3, 3);
-                tail.rotate(30);
-                tail.fillColor = turtleColour;
+                var body = new paper.Path.RegularPolygon(new paper.Point(oldX+2,oldY+3), 3, 10);
+                body.rotate(90);
+                body.fillColor = turtleColour;
 
-                var circlePoint = new paper.Point(oldX, oldY);
-
-                var circle1 = new paper.Path.Circle(circlePoint, 10);
-                circle1.fillColor = turtleColour;
-
-                var circlePoint = new paper.Point(oldX+7, oldY-10);
-
-                var circle2 = new paper.Path.Circle(circlePoint, 3);
-                circle2.fillColor = turtleColour;
-
-                var circlePoint = new paper.Point(oldX-7, oldY+10);
-
-                var circle3 = new paper.Path.Circle(circlePoint, 3);
-                circle3.fillColor = turtleColour;
-
-                var circlePoint = new paper.Point(oldX+7, oldY+10);
-
-                var circle4 = new paper.Path.Circle(circlePoint, 3);
-                circle4.fillColor = turtleColour;
-
-                var circlePoint = new paper.Point(oldX-7, oldY-10);
-
-                var circle5 = new paper.Path.Circle(circlePoint, 3);
-                circle5.fillColor = turtleColour;
-
-                var circlePoint = new paper.Point(oldX+10, oldY);
-
-                var circle6 = new paper.Path.Circle(circlePoint, 5);
-                circle6.fillColor = turtleColour;
-
-                this.turtle = new paper.Group([circle1,circle2,circle3,circle4,circle5,circle6,tail]);
+                this.turtle = body;
             }
         };
         this.draw_turtle();
-        
+
         /*
           The onFrame function does all the drawing, its called every frame at roughly
           30-60fps
         */
         var that = this;
-            
+
         paper.view.on('frame', function(event) {
             var turtleSpeed = that.turtleSpeed;
             var changRot = that.changRot;
             var turtleShow = that.turtleShow;
-
             var changX =Math.abs(that.oldX-that.newX);
             var changY =Math.abs(that.oldY-that.newY);
 
@@ -20289,7 +20326,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             var frameY;
 
             if ((changY === 0 || changX === 0)){
-                // can't devide by 0, no need for frame calculation anyway if there's 
+                // can't devide by 0, no need for frame calculation anyway if there's
                 // no change in one direction
                 frameY = 1;
                 frameX = 1;
@@ -20300,11 +20337,10 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             } else {
                 // make ratio for X
                 frameY = (changY/changX);
-                frameX = 1;	
+                frameX = 1;
             }
             //alert("changX: " + changX + " chanY: " + changY )
             if((changX<turtleSpeed) && that.changRot===0 && changX!==0){
-                
                 if ((changX<=2) && changRot===0 && changX!==0){
                     that.oldX=that.newX;
                     that.oldY=that.newY;
@@ -20316,7 +20352,6 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             }
 
             if ((changY<turtleSpeed) && that.changRot===0 && changY!==0){
-                
                 if ((changY<=2) && that.changRot===0 && changY!==0){
                     that.oldX = that.newX;
                     that.oldY = that.newY;
@@ -20325,17 +20360,17 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                 //	turtleSpeed=(Math.abs(oldX-newX));
                 //}
                 turtleSpeed = changY;
-            
+
             }
-            
+
             //if( changX<changY && (Math.abs(oldY-newY)-10)<turtleSpeed ){
             //	turtleSpeed=1;
-                
+
             //}
-            
+
             else if  (that.changRot!==0 && (Math.abs(changRot))<turtleSpeed){
                 turtleSpeed=1;
-                
+
             }
             //frameX *= turtleSpeed;
             //frameY *= turtleSpeed;
@@ -20343,18 +20378,54 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             //rotate turtle, current is the exact centre of the turtle
             if (changRot !== 0 && that.turtleShow===1){
                 var current = new paper.Point(that.oldX, that.oldY);
-                
-                if(changRot < 0) {
+
+                if(changRot <-1) {
+
                     // Turning left
                     that.changRot += that.rotateSpeed*turtleSpeed;
                     that.turtle.rotate(-that.rotateSpeed*turtleSpeed,current);
-                } else {
+                } else if(changRot >1){
+
                     // Turning right
                     that.changRot -= that.rotateSpeed*turtleSpeed;
-                    that.turtle.rotate(that.rotateSpeed*turtleSpeed,current);                
+                    that.turtle.rotate(that.rotateSpeed*turtleSpeed,current);
                 }
+
+                else if (changRot <=- 0.1) {
+
+                    rotateSpeed = 0.1;
+                    that.changRot += rotateSpeed*turtleSpeed;
+                    that.turtle.rotate(-rotateSpeed*turtleSpeed,current);
+                } else if(changRot >=0.1  ) {
+
+                    var rotateSpeed = 0.1;
+                    // Turning right
+                    that.changRot -= rotateSpeed*turtleSpeed;
+                    that.turtle.rotate(rotateSpeed*turtleSpeed,current);
+                }
+
+                else if (changRot <=- 0.01) {
+
+                    var rotateSpeed = 0.01;
+                    rotateSpeed = 0.01;
+                    that.changRot += rotateSpeed*turtleSpeed;
+                    that.turtle.rotate(-rotateSpeed*turtleSpeed,current);
+                } else if(changRot >=0.01  ) {
+
+                    var rotateSpeed = 0.01;
+                    // Turning right
+                    that.changRot -= rotateSpeed*turtleSpeed;
+                    that.turtle.rotate(rotateSpeed*turtleSpeed,current);
+                }
+
+                else if (changRot>-0.01 && changRot<0.01 ){
+
+                    that.changRot = 0;
+                    that.oldRotation = that.newRotation;
+                }
+
             } else {
-                //if turtle is off we have to manually set old rotation	
+                //if turtle is off we have to manually set old rotation
                 that.oldRotation = that.newRotation;
             }
 
@@ -20384,16 +20455,15 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
                     that.turtle.translate(0,(-frameY*turtleSpeed));
                 }
             }
-            
+
             // prints the little circles every frame until we reach the correct point
             // to create the line
             //alert(" ("+ newY+ ")  "+ oldY+ "  where brooklyn at " +" ("+ newX+ ")  "+ oldX + " speed:"+ turtleSpeed + " changRot:" + changRot);
             if (that.newY !== that.oldY || that.newX !== that.oldX || that.changRot !== 0){
-                
                 if(that.newPen == 1){
                     that.path.add(new paper.Point(that.oldX, that.oldY));
                     that.turtle.position = new paper.Point(that.oldX, that.oldY);
-                    that.path.strokeColor = that.newColour;
+                    that.path.strokeColor = that.translateColor(that.newColour);
                 }
             } else {
                 // done animating this command
@@ -20402,7 +20472,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             }
         });
     }
-    
+
     // Define the DatePickerView
     var TurtleView = widget.DOMWidgetView.extend({
         render: function(){
@@ -20414,12 +20484,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             var buttonDiv = $('<div/>');
             buttonDiv.attr('target','button-area');
 
-            // create help button 
+            // create help button
             var helpButton = $('<button/>');
             helpButton.append("Help!");
             buttonDiv.append(helpButton);
-            
-            // create grid button  
+
+            // create grid button
             var gridButton = $('<button/>');
             gridButton.attr('id','grid-element');
             gridButton.attr('value', 0);
@@ -20429,7 +20499,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
 
             var canvasDiv = $('<div/>');
             toinsert.append(canvasDiv);
-            
+
             var canvas = document.createElement('canvas');
             canvas.id     = "canvas1";
             canvas.width  = 401;
@@ -20437,10 +20507,10 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
             canvas.resize;
 
             canvasDiv.append(canvas);
-            
+
             this.turtledrawing = new TurtleDrawing(canvas, gridButton, helpButton);
             this.turtledrawing.points = this.model.get('points');
-            
+
             this.$el.append(toinsert);
             window.debugturtle = this;
         },
@@ -20450,8 +20520,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;!(__WEBPACK_AMD_
         }
     });
 
-    //return {TurtleView: TurtleView};
-    return {TurtleDrawing: TurtleDrawing};
+    return {TurtleView: TurtleView};
 }).apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
@@ -20478,7 +20547,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * Update this value when attributes are added/removed from
  * your models, or serialized format changes.
  */
-exports.EXTENSION_SPEC_VERSION = '0.1.19';
+exports.EXTENSION_SPEC_VERSION = '0.2.1';
 
 
 /***/ }),
