@@ -1,6 +1,6 @@
 channels:
-- conda-forge
 - bokeh/channel/dev
+- conda-forge
 dependencies:
 - jupyterlab=0.32.1
 - nodejs=8.9
