@@ -1,6 +1,7 @@
 channels:
 - bokeh/channel/dev
 - conda-forge
+- r
 dependencies:
 - jupyterlab=0.32.1
 - nodejs=8.9
@@ -25,3 +26,5 @@ dependencies:
 - traittypes=0.2
 - invoke=1.1.1
 - plotly=3.1
+- r-ggplot2
+- r-irkernel=0.8.11
