@@ -46,4 +46,9 @@ dependencies:
 - biopandas
 - scipy
 - pytest
+- cobra
+- more-itertools
+- json_tricks>3.0
+- bcbio-gff
+- bioservices
 - deprecation
