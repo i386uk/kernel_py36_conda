@@ -1,7 +1,9 @@
 channels:
+- auto
 - bokeh/channel/dev
 - conda-forge
 - biocore
+- bioconda
 - edbr
 dependencies:
 - jupyterlab=0.32.1
