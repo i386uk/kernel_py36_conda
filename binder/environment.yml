@@ -52,4 +52,5 @@ dependencies:
 - more-itertools
 - json_tricks>3.0
 - bioservices
+- bcbio-gff
 - deprecation
