@@ -1,8 +1,8 @@
 channels:
-- auto
 - bokeh/channel/dev
 - conda-forge
 - biocore
+- biocozy
 - bioconda
 - edbr
 dependencies:
