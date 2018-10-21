@@ -44,7 +44,6 @@ dependencies:
 - beautifulsoup4=4.5.3
 - nbsphinx
 - biopandas
-- bcbio-gff
 - scipy
 - pytest
 - deprecation
