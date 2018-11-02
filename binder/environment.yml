@@ -1,6 +1,7 @@
 channels:
 - bokeh/channel/dev
 - conda-forge
+- anaconda
 dependencies:
 - jupyterlab=0.32.1
 - nodejs=8.9
@@ -26,3 +27,5 @@ dependencies:
 - invoke=1.1.1
 - plotly=3.1
 - pandas-datareader
+- keras
+- pydotplus
