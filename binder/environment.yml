@@ -30,3 +30,4 @@ dependencies:
 - keras
 - pydotplus
 - statsmodels
+- graphviz
