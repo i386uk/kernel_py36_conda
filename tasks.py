@@ -53,6 +53,7 @@ def build(ctx, env_name=env_name, kernel=True):
         jupyter labextension install bqplot@0.3.6 --no-build &&
         jupyter labextension install jupyter-matplotlib@0.3.0 --no-build &&
         jupyter labextension install jupyterlab_bokeh &&
+		jupyter labextension install @deathbeds/jupyterlab_graphviz &&
         jupyter lab clean && jupyter lab build
         """.format(source, env_name).strip().replace('\n', ''))
     if kernel:
