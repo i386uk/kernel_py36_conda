@@ -31,3 +31,4 @@ dependencies:
 - pydotplus
 - statsmodels
 - graphviz
+- python-graphviz
