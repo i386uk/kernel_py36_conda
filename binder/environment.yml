@@ -4,6 +4,7 @@ channels:
 - conda-forge
 - biocore
 - bioconda
+- anaconda
 dependencies:
 - jupyterlab=0.32.1
 - nodejs=8.9
@@ -53,3 +54,9 @@ dependencies:
 - bioservices
 - bcbio-gff
 - deprecation
+- pandas-datareader
+- keras
+- pydotplus
+- statsmodels
+- graphviz
+- python-graphviz
