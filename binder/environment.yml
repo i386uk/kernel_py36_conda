@@ -60,3 +60,4 @@ dependencies:
 - statsmodels
 - graphviz
 - python-graphviz
+- opencv
