@@ -1,5 +1,5 @@
 channels:
-- bokeh/channel/dev
+- bokeh/channel/dev 
 - conda-forge
 - anaconda
 dependencies:
