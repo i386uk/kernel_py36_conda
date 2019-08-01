@@ -32,3 +32,4 @@ dependencies:
 - statsmodels
 - graphviz
 - python-graphviz
+- pythreejs
