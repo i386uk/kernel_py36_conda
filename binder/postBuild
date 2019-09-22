@@ -1,4 +1,3 @@
-set -ex
+#!/bin/bash
 
-invoke build --env-name=root --no-kernel
-jupyter lab clean
+jupyter labextension install jupyter-threejs
