@@ -12,3 +12,4 @@ dependencies:
   - bokeh
   - pythreejs
   - nodejs
+  - jupyterlab=1.0.2
