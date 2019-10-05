@@ -1,15 +1,20 @@
-name: example-environment
+name: upgraded-environment
 channels:
   - conda-forge
 dependencies:
   - numpy
   - psutil
-  - toolz
   - matplotlib
-  - dill
   - pandas
-  - partd
   - bokeh
   - pythreejs
   - nodejs
   - jupyterlab=1.0.2
+  - scikit-image
+  - scikit-learn
+  - seaborn
+  - tensorflow
+  - sympy
+  - keras
+  - graphviz
+  - python-graphviz
