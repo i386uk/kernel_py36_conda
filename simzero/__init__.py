@@ -30,8 +30,7 @@ def set2D(n_part):
 
 
 def set3D(n_part):
-    # szm.set(3, n_part)
-    raise Exception('Not implemented yet')
+    szm.set(3, n_part)
 
 
 def push(coords):
