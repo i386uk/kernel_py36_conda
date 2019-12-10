@@ -5,22 +5,22 @@ import random
 import string
 from collections import defaultdict
 
-class formctrl(object):
+class autoform(object):
     
     forms = defaultdict(list)
     
-    def __init__(self, form):
+    def __init__(self, name):
         self._has_arg = True
         self._func = None
         self._sig = None
         self._doc = None
-        if callable(form):
+        if callable(name):
             # then the decorator is created without a parameter
             self._has_arg = False
-            self._form = 'form_%s' % formctrl._generate_name()
-            self._set_func_info(form)
+            self._form = 'form_%s' % autoform._generate_name()
+            self._set_func_info(name)
         else:
-            self._form = form
+            self._form = name
         self._n_calls = 0
         
     def __call__(self, *args, **kwargs):
@@ -39,11 +39,11 @@ class formctrl(object):
         self._sig = inspect.signature(self._func)
         self._doc = inspect.getdoc(self._func)
         functools.update_wrapper(self, func)
-        if not self in formctrl.forms[self._form]:
-            formctrl.forms[self._form].append(self)        
+        if not self in autoform.forms[self._form]:
+            autoform.forms[self._form].append(self)        
     
     def __str__(self):
-        return '<formctrl name=%s func=%s>' % (self.form_name(), self.func_name())
+        return '<autoform name=%s func=%s>' % (self.form_name(), self.func_name())
 
     def __repr__(self):
         return self.__str__()
