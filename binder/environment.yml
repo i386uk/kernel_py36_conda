@@ -18,3 +18,4 @@ dependencies:
   - keras
   - graphviz
   - python-graphviz
+  - jsonpickle
