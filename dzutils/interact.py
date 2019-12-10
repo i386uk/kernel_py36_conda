@@ -5,7 +5,7 @@ import random
 import string
 from collections import defaultdict
 
-class autoform(object):
+class dzform(object):
     
     forms = defaultdict(list)
     
@@ -17,7 +17,7 @@ class autoform(object):
         if callable(name):
             # then the decorator is created without a parameter
             self._has_arg = False
-            self._form = 'form_%s' % autoform._generate_name()
+            self._form = 'form_%s' % dzform._generate_name()
             self._set_func_info(name)
         else:
             self._form = name
@@ -39,11 +39,11 @@ class autoform(object):
         self._sig = inspect.signature(self._func)
         self._doc = inspect.getdoc(self._func)
         functools.update_wrapper(self, func)
-        if not func.__name__ in [f.__name__ for f in autoform.forms[self._form]]:
-            autoform.forms[self._form].append(self)        
+        if not func.__name__ in [f.__name__ for f in dzform.forms[self._form]]:
+            dzform.forms[self._form].append(self)        
     
     def __str__(self):
-        return '<autoform name=%s func=%s>' % (self.form_name(), self.func_name())
+        return '<dzform name=%s func=%s>' % (self.form_name(), self.func_name())
 
     def __repr__(self):
         return self.__str__()
@@ -65,11 +65,11 @@ class autoform(object):
     
     @staticmethod
     def clear_forms():
-        autoform.forms = defaultdict(list)
+        dzform.forms = defaultdict(list)
         
     @staticmethod
     def clear_form(name):
-        autoform.forms.pop(name, None)
+        dzform.forms.pop(name, None)
     
     @staticmethod
     def _generate_name(length=5):
@@ -79,8 +79,8 @@ class autoform(object):
     
     @staticmethod
     def get_form_json(name):
-        if name in autoform.forms:
-            form = autoform.forms[name]
+        if name in dzform.forms:
+            form = dzform.forms[name]
             res = {'success': True, 'payload': form}
         else:
             res = {'success': False, 'error': 'Form name does not exist'}
