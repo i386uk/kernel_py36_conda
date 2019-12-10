@@ -39,7 +39,7 @@ class autoform(object):
         self._sig = inspect.signature(self._func)
         self._doc = inspect.getdoc(self._func)
         functools.update_wrapper(self, func)
-        if not self in autoform.forms[self._form]:
+        if not func.__name__ in [f.__name__ for f in autoform.forms[self._form]]:
             autoform.forms[self._form].append(self)        
     
     def __str__(self):
@@ -64,8 +64,24 @@ class autoform(object):
         return self._n_calls
     
     @staticmethod
+    def clear_forms():
+        autoform.forms = defaultdict(list)
+        
+    @staticmethod
+    def clear_form(name):
+        autoform.forms.pop(name, None)
+    
+    @staticmethod
     def _generate_name(length=5):
         """Generate a random string of fixed length """
         letters= string.ascii_lowercase
         return ''.join(random.sample(letters, length))
     
+    @staticmethod
+    def get_form_json(name):
+        if name in autoform.forms:
+            form = autoform.forms[name]
+            res = {'success': True, 'payload': form}
+        else:
+            res = {'success': False, 'error': 'Form name does not exist'}
+        return jsonpickle.encode(res)
