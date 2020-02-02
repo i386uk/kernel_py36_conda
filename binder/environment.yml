@@ -6,6 +6,7 @@ dependencies:
   - psutil
   - matplotlib
   - pandas
+  - pandas-datareader=0.8.1
   - bokeh
   - pythreejs
   - nodejs
