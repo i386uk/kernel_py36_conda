@@ -20,11 +20,11 @@ def publish_display_data(*args, **kw):
 
 
 # This enum class is currently only used for data validation
+# and to map ints in the published json
+#   self.components = [{'type': 0}, ..]
 # I could also use it:
 # . to expose types to user (and avoid validation), e.g.
 #   simzero.set2D(simzero.PARTICLE)
-# . to use mapped ints in the published json, e.g.
-#   self.components = [{'type': 0}, ..]
 class ComponentTypes(Enum):
     particle = 0
     filament = 1
@@ -50,8 +50,7 @@ class SimzeroManager:
         for a in args:
             component = {}
             if isinstance(a, str):
-                t = ComponentTypes[a]  # just for validation
-                component[self.type_key] = t.name
+                component[self.type_key] = ComponentTypes[a].value
             elif isinstance(a, dict):
                 pass  # TODO: parse attributes
             else:
@@ -63,12 +62,11 @@ class SimzeroManager:
         })
 
     def validate(self, array, component_type):
-        t = ComponentTypes[component_type]
-        if t == ComponentTypes.particle:
+        if component_type == ComponentTypes.particle:
             # x1,y1,z1,x2,y2,z2,..
             if len(array) % self.dim != 0:
                 raise Exception('Mismatch in the number of particle coords')
-        elif t == ComponentTypes.filament:
+        elif component_type == ComponentTypes.filament:
             # n_filaments,fil1.x1,fil1.y1,fil1.z1,..,fil2.x1,fil2.y1,fil2.z1,..
             n_filaments = array[0]
             n_coords = len(array)-1
@@ -93,6 +91,22 @@ class SimzeroManager:
     def show():
         publish_display_data({
             SIMZERO_SHOW_MIME_TYPE: True
+        })
+
+    def line(self, *args):
+        if len(args) / self.dim != 2:
+            raise Exception('Mismatch in the number of line coords')
+
+        publish_display_data({
+            SIMZERO_SET_MIME_TYPE: {'line': args}
+        })
+
+    def circle(self, *args):
+        if len(args)-1 != self.dim:
+            raise Exception('Mismatch in the number of circle coords')
+
+        publish_display_data({
+            SIMZERO_SET_MIME_TYPE: {'circle': args}
         })
 
 
