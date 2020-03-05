@@ -16,57 +16,47 @@ def publish_display_data(*args, **kw):
     # This import MUST be deferred or it will introduce a hard dependency on IPython
     from IPython.display import publish_display_data
     return publish_display_data(*args, **kw)
-    # print(args)
+    # print(args[0])
 
 
-# This enum class is currently only used for data validation
-# and to map ints in the published json
-#   self.components = [{'type': 0}, ..]
-# I could also use it:
-# . to expose types to user (and avoid validation), e.g.
-#   simzero.set2D(simzero.PARTICLE)
+# This enum class is used for data validation and to map to ints in the json
+# {'type': 0} instead of {'type': 'particles'}
+# I could also use it to expose types to user (and avoid validation), e.g.
+#   simzero.set2D(simzero.PARTICLES)
 class ComponentTypes(Enum):
-    particle = 0
-    filament = 1
-    default = particle
+    particles = 0
+    filaments = 1
+    default = particles
 
 
 class SimzeroManager:
 
-    type_key = 'type'
+    key_dim = 'dim'
+    key_type = 'type'
 
     def __init__(self):
         self.dim = 0
-        self.components = []
+        self.system_type = ComponentTypes.default
 
-    def set(self, dim, *args):
-        if not args:
-            self.set(dim, ComponentTypes.default.name)
-            return
-
+    def set(self, dim, type=ComponentTypes.particles.name, **kwargs):
         self.dim = dim
-        self.components = []
-
-        for a in args:
-            component = {}
-            if isinstance(a, str):
-                component[self.type_key] = ComponentTypes[a].value
-            elif isinstance(a, dict):
-                pass  # TODO: parse attributes
-            else:
-                raise Exception('Unknown specifications for component')
-            self.components.append(component)
+        self.system_type = ComponentTypes[type]
+        specs = {
+            self.key_dim: self.dim,
+            self.key_type: self.system_type.value
+        }
+        specs.update(kwargs)
 
         publish_display_data({
-            SIMZERO_SET_MIME_TYPE: {'dim': dim, 'components': self.components}
+            SIMZERO_SET_MIME_TYPE: specs
         })
 
     def validate(self, array, component_type):
-        if component_type == ComponentTypes.particle:
+        if component_type == ComponentTypes.particles:
             # x1,y1,z1,x2,y2,z2,..
             if len(array) % self.dim != 0:
                 raise Exception('Mismatch in the number of particle coords')
-        elif component_type == ComponentTypes.filament:
+        elif component_type == ComponentTypes.filaments:
             # n_filaments,fil1.x1,fil1.y1,fil1.z1,..,fil2.x1,fil2.y1,fil2.z1,..
             n_filaments = array[0]
             n_coords = len(array)-1
@@ -76,15 +66,12 @@ class SimzeroManager:
             if n_coords % self.dim != 0:
                 raise Exception('Mismatch in the number of filament coords')
 
-    def push(self, *args):
+    def push(self, coords):
         # process positions at a single time-step
-        if len(args) != len(self.components):
-            raise Exception('Mismatched number of components')
-        for i in range(len(args)):
-            self.validate(args[i], self.components[i][self.type_key])
+        self.validate(coords, self.system_type)
 
         publish_display_data({
-            SIMZERO_PUSH_MIME_TYPE: args
+            SIMZERO_PUSH_MIME_TYPE: coords
         })
 
     @staticmethod
