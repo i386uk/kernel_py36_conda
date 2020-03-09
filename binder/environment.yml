@@ -20,3 +20,29 @@ dependencies:
   - graphviz
   - python-graphviz
   - jsonpickle
+  - cffi=1.11.5
+  - chardet=3.0.4
+  - cryptography=2.3.1
+  - idna=2.7
+  - libffi=3.2.1
+  - libgcc-ng=8.2.0
+  - ncurses=6.1
+  - openssl=1.0.2
+  - pip=10.0.1
+  - pycosat=0.6.3
+  - pycparser=2.18
+  - pyopenssl=18.0.0
+  - pysocks=1.6.8
+  - python=3.7.0
+  - readline=7.0
+  - requests=2.19.1
+  - ruamel_yaml=0.15.46
+  - setuptools=40.2.0
+  - six=1.11.0
+  - sqlite=3.24.0
+  - tk=8.6.8
+  - urllib3=1.23
+  - wheel=0.31.1
+  - xz=5.2.4
+  - yaml=0.1.7
+  - zlib=1.2.11
