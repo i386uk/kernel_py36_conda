@@ -20,4 +20,4 @@ dependencies:
   - graphviz
   - python-graphviz
   - jsonpickle
-  - ipycanvas
+  - ipycanvas=0.4.7
