@@ -28,4 +28,4 @@ dependencies:
   - geopandas
   - libgdal
   - gdal
-  - arcgis=1.8.1
+  - arcgis
