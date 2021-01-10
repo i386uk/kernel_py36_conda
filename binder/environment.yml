@@ -20,3 +20,12 @@ dependencies:
   - graphviz
   - python-graphviz
   - jsonpickle
+  - chainladder
+  - pyshp
+  - Shapely
+  - folium
+  - geojson
+  - geopandas
+  - libgdal
+  - gdal
+  - arcgis=1.8.1
