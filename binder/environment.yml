@@ -1,6 +1,7 @@
 name: upgraded-environment
 channels:
   - conda-forge
+  - esri
 dependencies:
   - numpy
   - psutil
