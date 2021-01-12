@@ -1,6 +1,8 @@
 name: upgraded-environment
+channel_priority: strict
 channels:
   - conda-forge
+  - esri
 dependencies:
   - numpy
   - psutil
@@ -20,3 +22,12 @@ dependencies:
   - graphviz
   - python-graphviz
   - jsonpickle
+  - conda-forge::chainladder
+  - conda-forge::pyshp
+  - conda-forge::Shapely
+  - conda-forge::folium
+  - conda-forge::geojson
+  - conda-forge::geopandas
+  - conda-forge::libgdal
+  - conda-forge::gdal
+  - esri::arcgis
